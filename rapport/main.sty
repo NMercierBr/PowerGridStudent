@@ -1,0 +1,31 @@
+\ProvidesPackage{main}
+
+
+%% PACKAGES A IMPORTER
+
+% Pour les images
+\usepackage{graphicx}
+\graphicspath{{./images/}} % TODO - le dossier où sont placées les images (ça peut changer pour Overleaf)
+\usepackage{caption}
+
+% Pour parler en français
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% Pour rendre les liens cliquables
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % TODO - activer/désactiver la couleur des liens
+    linktoc=all, 
+    linkcolor=blue, % TODO - changer la couleur des liens internes
+    urlcolor=green % TODO - changer la couleur des liens vers internet
+}
+
+% Pour modifier les marges
+\usepackage[top=2.5cm, bottom=2.5cm, right=2.5cm, left=2.5cm]{geometry} % TODO - placer les marges 
+
+
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{0pt}
+
+
