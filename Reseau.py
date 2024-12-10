@@ -51,7 +51,19 @@ class Reseau:
         return set(noeuds_visites) == set(self.noeuds.keys())
 
     def valider_distribution(self, t: Terrain) -> bool:
-        # TODO
+        # TODO - A tester :3
+
+        distrib_OK = True
+        clients = t.get_clients()
+        for client in clients:
+            for noeud in self.noeuds:
+                if client == noeud:
+                    continue
+            return False # Atteint uniquement si il y a un client qui n'est pas sur un noeud
+
+        return True # Atteint uniquement si on a jamais atteint "return False"
+
+
 
         return False
 
