@@ -1,5 +1,6 @@
 
 from Terrain import Terrain, Case
+import os
 
 class StrategieReseau:
     def configurer(self, t: Terrain) -> tuple[int, dict[int, tuple[int, int]], list[int]]:
@@ -8,32 +9,32 @@ class StrategieReseau:
 class StrategieReseauManuelle(StrategieReseau):
     def configurer(self, t: Terrain) -> tuple[int, dict[int, tuple[int, int]], list[int]]:
         print("----------------------------------- Strategie Reseau Manuelle -----------------------------------\n")
-        Terrain.charger(t)
-        print(f"Terrain {t} chargé.\n")
+        print()
+        txt = input("Veuillez choisir le fichier de terrain a charger : ")
+        while not(os.path.isfile(txt)):
+            txt = input(f"Le fichier {txt} n'existe pas, veuillez recommencer.")
+        t.charger(txt)
+        print(f"Terrain {txt} chargé.\n")
         t.afficher()
-        print("Souhaitez vous modifier le terrain ? Y/n")
-        choix = input().upper()
+        print()
+        choix = input("Souhaitez vous modifier le terrain ? Y/n \n").upper()
         entree = t.get_entree()
         noeuds = {}
-        noeuds["0"] = entree
-        noeudcount = 1
+        noeuds[0] = entree
+        noeudcount = 0
         arcs = []
-        while(choix != "Y" or choix != "N"):
-            print("Souhaitez vous modifier le terrain ? Y/n")
-            choix = input()
+        while(choix != 'Y' and choix != 'N'):
+            choix = input("Souhaitez vous modifier le terrain ? Y/n \n").upper()
         if(choix == "N"):
             return
         else :
-            print("Veuillez rajouter un noeud à un endroit du terrain (X pour arreter)\n")
-            quit = input().upper()
+            quit = input("Veuillez rajouter un noeud à un endroit du terrain (Entree pour continuer, X pour arreter)\n").upper()
             while(quit != 'X'):
 
                 # On ajoute un nouveau noeud au reseau
-                print("Ligne : \n")
-                ligne = input()
-                print("Colonne : \n")
-                colonne = input()
-                newNoeud = tuple[ligne,colonne]
+                ligne = input("Ligne : ")
+                colonne = input("Colonne : ")
+                newNoeud = (ligne,colonne)
                 noeudcount+=1
                 
                 # on vérifie que cette case n'est pas deja occupee
@@ -47,9 +48,9 @@ class StrategieReseauManuelle(StrategieReseau):
                 print(f"Les voisins du noeud ({ligne},{colonne}) sont : \n")
                 tmp_choixArcs = []
                 for key_noeud in noeuds.keys():
-                    c = noeuds[key_noeud][0]
-                    l = noeuds[key_noeud][1]
-                    if( (l-1 == ligne or l+1==ligne) and (c-1 == colonne or c+1 == colonne)):
+                    c = int(noeuds[key_noeud][0])
+                    l = int(noeuds[key_noeud][1])
+                    if( ((l-1 == ligne or l+1==ligne) and (c==colonne)) or ((l==ligne) and (c-1 == colonne or c+1 == colonne))):
                         print(f"{key_noeud} : ({l},{c})\n")
                         tmp_choixArcs.append(key_noeud)
 
@@ -61,8 +62,7 @@ class StrategieReseauManuelle(StrategieReseau):
                         print(val, end=' ')
                     inputArc = input()
                     while(input not in tmp_choixArcs):
-                        print("Veuillez choisir un noeud valide !\n")
-                        inputArc = input()
+                        inputArc = input("Veuillez choisir un noeud valide !\n")
                     
                     #On prepare les valeurs de l'arc pour mettre la plus petite a gauche,
                     # la plus grande a droite, puis on creer l'arc
@@ -77,9 +77,12 @@ class StrategieReseauManuelle(StrategieReseau):
                         return
                     if (n1, n2) not in arcs:
                         arcs.append((n1, n2))
-
-                print("Veuillez rajouter un noeud à un endroit du terrain (X pour arreter) \n")
-                quit = input().upper()
+                t.afficher()
+                print()
+                print(f"------------ ENTREE : {entree}")
+                print(f"------------ NOEUDS : {noeuds}")
+                print(f"------------ ARCS : {arcs}")
+                quit = input("Veuillez rajouter un noeud à un endroit du terrain (Entree pour continuer, X pour arreter) \n").upper()
 
         noeuds = input()
         return entree, noeuds, arcs
