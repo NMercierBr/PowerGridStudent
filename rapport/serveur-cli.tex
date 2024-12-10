@@ -18,4 +18,16 @@ Ceci étant fait après avoir ouvert le pare-feu de la VM (avec \textit{sudo ufw
 
 Ensuite, en suivant les instructions données pour l'installation de Jenkins (installation et démarrage du service, déploiement des clés SSH). Nous pouvons accéder au tableau de bord du service.
 Etant donnée notre configuration utilisant un NAT, on accède pas à ce service via l'adresse IP de l'interface \textit{eth0} de la VM mais via l'adresse \textit{localhost (127.0.0.1)}.
-Une fois connectés, on a du relancer plusieurs fois l'installation de tous les plugins, mais tout a fini par se finir correctement.
+Une fois connectés, on a du relancer plusieurs fois l'installation de tous les plugins, mais tout a fini par se finir correctement.\\
+
+Ensuite, on a pu mettre en place la pipeline en permettant à Jenkins d'utiliser le JenkinsFile de notre repo Github sans problème\@.
+On a pu enfin la lancer pour la première fois et vérifier que tout fonctionnait proprement (fig.~\ref{fig:PipelineFailed})
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\textwidth]{serveur-cli/PipelineFailed}
+    \caption{Task Failed successfully!!}
+    \label{fig:PipelineFailed}
+\end{figure}
+
+
