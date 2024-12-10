@@ -32,8 +32,8 @@ class StrategieReseauManuelle(StrategieReseau):
             while(quit != 'X'):
 
                 # On ajoute un nouveau noeud au reseau
-                ligne = input("Ligne : ")
-                colonne = input("Colonne : ")
+                ligne = int(input("Ligne : "))
+                colonne = int(input("Colonne : "))
                 newNoeud = (ligne,colonne)
                 noeudcount+=1
                 
@@ -50,6 +50,7 @@ class StrategieReseauManuelle(StrategieReseau):
                 for key_noeud in noeuds.keys():
                     c = int(noeuds[key_noeud][0])
                     l = int(noeuds[key_noeud][1])
+                   
                     if( ((l-1 == ligne or l+1==ligne) and (c==colonne)) or ((l==ligne) and (c-1 == colonne or c+1 == colonne))):
                         print(f"{key_noeud} : ({l},{c})\n")
                         tmp_choixArcs.append(key_noeud)
