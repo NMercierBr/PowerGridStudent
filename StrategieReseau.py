@@ -18,7 +18,7 @@ class StrategieReseauManuelle(StrategieReseau):
         t.afficher()
         print()
         choix = input("Souhaitez vous modifier le terrain ? Y/n \n").upper()
-        entree = t.get_entree()     #TODO VOISINAGE INVERSEE LIGNE COLONNE ????
+        entree = t.get_entree()
         noeuds = {}
         noeuds[0] = entree
         noeudcount = 0
@@ -48,9 +48,8 @@ class StrategieReseauManuelle(StrategieReseau):
                 print(f"Les voisins du noeud ({ligne},{colonne}) sont : \n")
                 tmp_choixArcs = []
                 for key_noeud in noeuds.keys():
-                    c = int(noeuds[key_noeud][0])
-                    l = int(noeuds[key_noeud][1])
-                    print(f"indice : {key_noeud}")
+                    l = int(noeuds[key_noeud][0])
+                    c = int(noeuds[key_noeud][1])
                     if( ((l-1 == ligne or l+1==ligne) and (c==colonne)) or ((l==ligne) and (c-1 == colonne or c+1 == colonne))):
                         print(f"{key_noeud} : ({l},{c})\n")
                         tmp_choixArcs.append(int(key_noeud))
