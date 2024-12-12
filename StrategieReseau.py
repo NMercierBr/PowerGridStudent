@@ -31,9 +31,17 @@ class StrategieReseauManuelle(StrategieReseau):
             quit = input("Souhaitez vous rajouter un noeud à un endroit du terrain ? (Entree pour continuer, X pour arreter)\n").upper()
             while(quit != 'X'):
 
+                # on prend l'entree, en verifiant qu'on ne depasse pas du terrain
+                ligne = int(input(f"Ligne (compris entre 0 et {t.hauteur-1}) : "))
+                while(ligne < 0 or ligne > t.hauteur-1):
+                    print("Vous depassez la taille autorisee, veuillez ressayer :\n")
+                    ligne = int(input(f"Ligne (compris entre 0 et {t.hauteur-1}) : "))
+
+                colonne = int(input(f"Colonne (compris entre 0 et {t.largeur-1}) :"))
+                while(ligne < 0 or ligne > t.largeur-1):
+                    print("Vous depassez la taille autorisee, veuillez ressayer :\n")
+                    colonne = int(input(f"Colonne (compris entre 0 et {t.largeur-1}) :"))
                 # On ajoute un nouveau noeud au reseau
-                ligne = int(input("Ligne : "))
-                colonne = int(input("Colonne : "))
                 newNoeud = (ligne,colonne)
                 noeudcount+=1
                 
