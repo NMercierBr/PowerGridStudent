@@ -85,3 +85,4 @@ class Reseau:
             else:
                 cout += 1
         return cout
+    
