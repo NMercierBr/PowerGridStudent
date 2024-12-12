@@ -87,9 +87,11 @@ class StrategieReseauManuelle(StrategieReseau):
                         arcs.append((n1, n2))
                 t.afficher()
                 print()
-                print(f"------------ ENTREE : {entree}")
-                print(f"------------ NOEUDS : {noeuds}")
-                print(f"------------ ARCS : {arcs}")
+                print(f"------------ ENTREE : {entree}\n")
+                print(f"------------ NOEUDS : {noeuds}\n")
+                print(f"------------ ARCS : {arcs}\n")
+                print(f"------------ NOMBRE DE NOEUDS : {len(noeuds)}\n")
+                print(f"------------ NOMBRE D'ARCS : {len(arcs)}\n")
                 print()
                 quit = input("Souhaitez vous rajouter un noeud à un endroit du terrain ? (Entree pour continuer, X pour arreter) \n").upper()
 
@@ -145,6 +147,8 @@ class StrategieReseauAuto(StrategieReseau):
                 # on sonde d'abord toutes les lignes/colonnes ayant des clients
                 ligne_client = []
                 colonne_client = []
+                ligne_client.append(int(entree[0]))
+                colonne_client.append(int(entree[1]))
                 for i, li in enumerate(t.cases):
                     for j, co in enumerate(li):
                         if co == Case.CLIENT :
@@ -182,14 +186,17 @@ class StrategieReseauAuto(StrategieReseau):
                             arcs.append((key1, key2))
 
             case 3 :    # STRATEGIE ALGO OPTI
+
                 return
             case _ :    # Erreur
-                return -1
+                print("ERREUR\n")
+                return -1 , {}, []
 
         print()
         print(f"------------ ENTREE : {entree}\n")
         print(f"------------ NOEUDS : {noeuds}\n")
         print(f"------------ ARCS : {arcs}\n")
+        print(f"------------ NOMBRE DE NOEUDS : {len(noeuds)}\n")
         print(f"------------ NOMBRE D'ARCS : {len(arcs)}\n")
         print()
     
