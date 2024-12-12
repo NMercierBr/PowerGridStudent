@@ -43,10 +43,10 @@ class StrategieReseauManuelle(StrategieReseau):
                     colonne = int(input(f"Colonne (compris entre 0 et {t.largeur-1}) :"))
                 # On ajoute un nouveau noeud au reseau
                 newNoeud = (ligne,colonne)
-                noeudcount+=1
                 
                 # on vérifie que cette case n'est pas deja occupee
-                if newNoeud not in noeuds.values(): 
+                if newNoeud not in noeuds.values():
+                    noeudcount+=1
                     noeuds[noeudcount] = newNoeud
                 else:
                     print("Cette case est deja occupee par un noeud, ressayez : ")
@@ -98,6 +98,100 @@ class StrategieReseauManuelle(StrategieReseau):
 
 class StrategieReseauAuto(StrategieReseau):
     def configurer(self, t: Terrain) -> tuple[int, dict[int, tuple[int, int]], list[int]]:
-        # TODO
-        return -1, {}, []
+        print("----------------------------------- Strategie Reseau Automatique -----------------------------------\n")
+        print()
+        txt = input("Veuillez choisir le fichier de terrain a charger : \n")
+        while not(os.path.isfile(txt)):
+            txt = input(f"Le fichier {txt} n'existe pas, veuillez recommencer.\n")
+        t.charger(txt)
+        print(f"Terrain {txt} chargé.\n")
+        t.afficher()
+        print("\nVeuillez choisir la strategie pour generer le reseau :\n \
+        \n1 : Reseau couvrant tout le terrain \
+        \n2 : Reseau qui couvre toutes les lignes contenant des clients, sans prendre en compte les obstacles \
+        \n3 : Algorithme optimisé \n ")
+
+        choix = int(input())
+        while (choix < 1 or choix > 3 ):
+            choix = int(input("Veuillez entrer une donnee valide (entre 1 et 3) : \n"))
+
+        #initialisation
+        entree = t.get_entree()
+        noeuds = {}
+        noeudcount = 0
+        noeuds[noeudcount] = entree
+        arcs = []
+        largeur = t.largeur
+        hauteur = t.hauteur
+
+        match choix:
+            case 1 :    # STRATEGIE COUVRANT TOUT LE TERRAIN
+                for i, li in enumerate(t.cases):
+                    for j, co in enumerate(li):
+                        if co == Case.ENTREE:
+                            continue
+                        
+                        newNoeud = (i, j)
+                        if newNoeud not in noeuds.values():
+                            noeudcount+=1
+                            noeuds[noeudcount] = newNoeud
+
+                        for key_noeud, (l, c) in noeuds.items():
+                            if (abs(l - i) == 1 and c == j) or (l == i and abs(c - j) == 1):
+                                arcs.append((key_noeud, noeudcount))
+
+            case 2 :    # STRATEGIE TOUTES LIGNES CLIENTS
+
+                # on sonde d'abord toutes les lignes/colonnes ayant des clients
+                ligne_client = []
+                colonne_client = []
+                for i, li in enumerate(t.cases):
+                    for j, co in enumerate(li):
+                        if co == Case.CLIENT :
+                            ligne_client.append(i)
+                            colonne_client.append(j)
+
+                # On ajoute des noeuds sur toutes les lignes comportants des clients
+                for k in ligne_client:
+                    for larg in range(largeur):
+                        newNoeud = (k, larg)
+                        if newNoeud not in noeuds.values():
+                            noeudcount+=1
+                            noeuds[noeudcount] = newNoeud
+                
+                # On ajoute des noeuds sur toutes les colonnes comportants des clients
+                for k in colonne_client:
+                    for haut in range(hauteur):
+                        newNoeud = (haut, k)
+                        if newNoeud not in noeuds.values(): 
+                            noeudcount+=1
+                            noeuds[noeudcount] = newNoeud
+
+                keys = list(noeuds.keys())
+
+                for i in range(len(keys)):
+                    key1 = keys[i]
+                    x1, y1 = noeuds[key1]
+
+                    for j in range(i + 1, len(keys)):
+                        key2 = keys[j]
+                        x2, y2 = noeuds[key2]
+
+                        # Vérifier la proximité des noeuds
+                        if (abs(x1 - x2) == 1 and y1 == y2) or (x1 == x2 and abs(y1 - y2) == 1):
+                            arcs.append((key1, key2))
+
+            case 3 :    # STRATEGIE ALGO OPTI
+                return
+            case _ :    # Erreur
+                return -1
+
+        print()
+        print(f"------------ ENTREE : {entree}\n")
+        print(f"------------ NOEUDS : {noeuds}\n")
+        print(f"------------ ARCS : {arcs}\n")
+        print(f"------------ NOMBRE D'ARCS : {len(arcs)}\n")
+        print()
+    
+        return entree, noeuds, arcs
 
