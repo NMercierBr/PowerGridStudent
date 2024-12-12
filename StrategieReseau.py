@@ -171,8 +171,8 @@ class StrategieReseauAuto(StrategieReseau):
                             noeudcount+=1
                             noeuds[noeudcount] = newNoeud
 
+                # Ajout de tous les arcs une fois tous les noeuds places
                 keys = list(noeuds.keys())
-
                 for i in range(len(keys)):
                     key1 = keys[i]
                     x1, y1 = noeuds[key1]
@@ -181,13 +181,41 @@ class StrategieReseauAuto(StrategieReseau):
                         key2 = keys[j]
                         x2, y2 = noeuds[key2]
 
-                        # Vérifier la proximité des noeuds
+                        # condition de proximite
                         if (abs(x1 - x2) == 1 and y1 == y2) or (x1 == x2 and abs(y1 - y2) == 1):
                             arcs.append((key1, key2))
 
             case 3 :    # STRATEGIE ALGO OPTI
+                        # ALGO BFS, parcours en largeur
+                
+                # On identifie tous les clients
+                clients = []
+                for i, li in enumerate(t.cases):
+                    for j, co in enumerate(li):
+                        if co == Case.CLIENT:
+                            clients.append((i, j))
+                
+                # on construit le réseau en utilisant BFS
+                for client in clients:
+                    chemin = BFS(entree, client, t)
+                    if not chemin:
+                        continue
 
-                return
+                    # on ajoute les noeuds et arcs au réseau
+                    for k in range(len(chemin)):
+                        noeud = chemin[k]
+                        if noeud not in noeuds.values():
+                            noeudcount += 1
+                            noeuds[noeudcount] = noeud
+                        
+                        # on ajoute un arc vers le noeud suivant dans le chemin
+                        if k > 0:
+                            noeud_precedent = chemin[k - 1]
+                            key1 = next(key for key, val in noeuds.items() if val == noeud_precedent)
+                            key2 = next(key for key, val in noeuds.items() if val == noeud)
+                            if (key1, key2) not in arcs and (key2, key1) not in arcs:
+                                arcs.append((key1, key2))
+
             case _ :    # Erreur
                 print("ERREUR\n")
                 return -1 , {}, []
@@ -201,4 +229,31 @@ class StrategieReseauAuto(StrategieReseau):
         print()
     
         return entree, noeuds, arcs
+    
+# Chemin optimal entre l'entrée et chaque client
+def BFS(depart, cible, terrain : Terrain):
+    
+    # tableau de tuple avec (coordonnée actuelle, chemin parcouru)
+    queue = [(depart, [])]  
+    visites = set()
+    largeur = terrain.largeur
+    hauteur = terrain.hauteur
+
+    while queue:
+        (x, y), chemin = queue.pop(0)
+        if (x, y) in visites:
+                continue
+        
+        visites.add((x, y))
+        chemin.append((x, y))
+
+        if (x, y) == cible:
+            return chemin 
+
+        # on ajoute les voisins valides (dans un rayon de 1 de distance horizontal/vertical) à la file
+        for nx, ny in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]:
+            if 0 <= nx < hauteur and 0 <= ny < largeur and terrain.cases[nx][ny] != Case.OBSTACLE and (nx, ny) not in visites:
+                queue.append(((nx, ny), chemin.copy()))
+                    
+    return []  # Aucun chemin trouvé
 
