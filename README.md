@@ -125,13 +125,13 @@ Ces commandes doivent mettre à jour la machine virtuelle, et installer Git et P
 
 ### Création de clés SSH pour l'authentification avec GitHub
 
-Votre invite de commande est maintenant située à l'intérieur d'une machine virtuelle configurée pour le développement Python. Vous pourrez bientôt télécharger le projet PowerGrid pour commencer à programmer. Cependant, l'utilisateur de la machine virtuelle ne possède pas encore les droits nécessaires pour pousser des modifications vers le dépôt sur GitHub. GitHub gère les droits de modification à partir de jeux de clés cryptographiques générés par un utilisateur pour garantir son identité. Linux dispose d'une commande permettant de générer une clé de chiffrement. Celle-ci vous permettra de confirmer votre identité au site GitHub. Exécutez tout d'abord la commande :
+Votre invite de commande est maintenant située à l'intérieur d'une machine virtuelle configurée pour le développement Python. Vous pourrez bientôt télécharger le projet PowerGrid pour commencer à programmer. Cependant, l'utilisateur de la machine virtuelle ne possède pas encore les droits nécessaires pour pousser des modifications vers le dépôt sur GitHub. GitHub gère les droits de modification à partir de jeux de clés cryptographiques générés par un utilisateur pour garantir son identité. Linux dispose d'une commande permettant de générer une clé de chiffrement. Celle-ci vous permettra de confirmer votre identité au site GitHub. Exécutez tout d'abord la commande suivante, en acceptant le chemin par défaut pour les fichiers générés (tapez ENTRÉE), et en choisissant un mot de passe simple pour la clé SSH :
 
 ```bash
 ssh-keygen -t ed25519 -C "prenom.nom@etudiant.univ-rennes.fr"
 ```
 
-Avec cette commande, votre système va générer deux fichiers contenant votre clé publique et votre clé privée. Validez l'emplacement par défaut pour ces fichiers, et tapez un mot de passe lorsque cela vous est demandé. Il s'agit du mot de passe qui sécurise votre clé. Pour ce TP, vous pouvez choisir le même que celui que vous avez entré comme mot de passe utilisateur pour la machine virtuelle. Tapez enfin la commande :
+Le mot de passe choisi est celui qui sécurise votre clé. Pour ce TP, vous pouvez choisir le même que celui que vous avez entré comme mot de passe utilisateur pour la machine virtuelle. Tapez enfin la commande :
 
 ```bash
 cat ~/.ssh/id_ed25519.pub
@@ -173,6 +173,8 @@ code .
 
 Ouvrez l'un des fichiers Python du projet dans VSCode. Un message devrait apparaître, vous invitant à installer l'extension Python dans WSL. Faites cette installation.
 
+> Dans le terminal de Visual Studio Code, si vous travaillez sur une machine de l'université, il est possible que vous soyez connecté en tant que `root` lorsque vous ouvrez votre projet. Si c'est le cas, changez d'utilisateur en utilisant la commande `su -- [NOM UTILISATEUR]`.
+
 Dans le terminal de la machine virtuelle, vous devez maintenant créer un environnement Python, dans lequel seront installés les paquets dont dépend votre projet. Exécutez les commandes suivantes :
 
 ```bash
@@ -181,9 +183,13 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Dans l'interface de Visual Studio Code, un message a du apparaître pour signaler la détection de la création d'un nouvel environnement Python. Acceptez la sélection de cet environnement pour le projet.
+Dans l'interface de Visual Studio Code, un message a du apparaître pour signaler la détection de la création d'un nouvel environnement Python. Acceptez la sélection de cet environnement pour le projet. Si aucun message n'apparaît, vous pouvez sélectionner l'environnement python `venv` en cliquant sur la mention concernant votre version de python, en bas à droite de l'interface quand un fichier `.py` est ouvert dans l'éditeur.
 
-Vérifiez que vous êtes en mesure d'exécuter le projet (script `PowerGrid.py`).
+Vérifiez que vous êtes en mesure d'exécuter le projet (script `PowerGrid.py`). Si vous n'avez pas directement une flèche verte pour l'exécution en haut à droite de l'interface de VSCode, vous pouvez exécuter vos scripts en ligne de commande dans le terminal de l'éditeur. L'activation d'un environnement python dans le terminal se fait grâce à la commande :
+
+```bash
+source venv/bin/activate
+```
 
 <a name="export-wsl" />
 
@@ -201,6 +207,12 @@ Par exemple, pour me connecter à une machine virtuelle `Debian` avec l'utilisat
 wsl --distribution Debian --user louis
 ```
 
+Pour retourner à l'intérieur de votre espace personnel sur la VM, vous pouvez finalement exécuter la commande :
+
+```bash
+cd ~
+```
+
 #### Export d'une machine virtuelle pour réutilisation ultérieure
 
 > Note : Cette section est principalement à destination des étudiants ayant choisi de développer en utilisant les machines de l'université, les autres étudiants peuvent ignorer ces instructions.
@@ -215,17 +227,31 @@ wsl --export Debian debian-dev.tar
 
 Vous devriez voir apparaître un fichier `debian-dev.tar` faisant quelques gigaoctets. Il s'agit du fichier à conserver dans un endroit sûr.
 
+> Si vous travaillez sur les machines de l'université, placez ce fichier sur le réseau (lecteur **H:**) ou sur un emplacement cloud personnel. Un fichier laissé sur le lecteur **C:** ne sera pas forcément acessible lors de votre prochaine connexion.
+
 Afin de charger votre machine virtuelle sauvegardée, lors d'une utilisation ultérieure, vous pourrez utiliser la commande suivante :
 
 ```bash
 wsl --import Debian-dev DebianDev debian-dev.tar
 ```
 
+> Si vous travaillez sur les machines de l'université, exécutez cette commande sur le lecteur local **C:** (par exemple dans vos documents). Il vous manquera des droits si vous cherchez à réaliser cette opération drectement sur le réseau.
+
+Le premier paramètre de cette commande est le nom que portera la distribution dans WSL une fois importée. Le deuxième paramètre est le chemin vers le dossier dans lequel la machine virtuelle sera stockée, et le dernier argument est le nom du fichier `.tar` dans lequel la VM a été exportée par le passé.
+
 Pour lancer la machine virtuelle importée, il vous suffira alors de taper la commande :
 
 ```bash
 wsl --distribution Debian-dev --user [NOM UTILISATEUR]
 ```
+
+Puis tapez la commande :
+
+```bash
+cd ~
+```
+
+Pour rejoindre votre dossier personnel sur la VM (où se trouve votre projet).
 
 <a name="jenkins" />
 
@@ -249,14 +275,13 @@ Une fois la machine virtuelle démarrée, il vous est demandé de choisir un nom
 
 Une fois que l'invite de commande montre que vous êtes dans la machine virtuelle, exécutez les commandes suivantes pour configurer l'environnement :
 
+> Vous pouvez avoir besoin d'exécuter les commandes suivantes une par une plutôt qu'en bloc, pour que celles-ci soient comprises par le terminal Windows.
+
 ```bash
 sudo apt update
 sudo apt upgrade -y
-sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
-  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
-  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
-  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
 sudo apt update
 sudo apt install -y jenkins fontconfig openjdk-17-jre
 sudo ufw enable
@@ -348,6 +373,8 @@ Il vous est demandé dans l'interface de déverrouiller Jenkins pour la premièr
 sudo cat /var/lib/jenkins/secrets/intialAdminPassword
 ```
 
+> Si cette commande ne fonctionne pas, vous pouvez également trouver le mot de passe quelque part dans la sortie de jenkins obtenue en exécutant la commande `journalctl -u jenkins`.
+
 Copiez ce mot de passe dans le champ correspondant dans votre navigateur web, et validez. Choisissez d'installer les plugins recommandés et attendez la fin de leur configuration.
 
 Vous pouvez maintenant créer un utilisateur administrateur pour Jenkins. Cette fois encore, choisissez des identifiants courts et faciles à retenir. Une fois les pages suivantes validées, vous devez parvenir au tableau de bord de Jenkins.
@@ -407,7 +434,7 @@ Afin de configurer une exécution du Pipeline environ une fois toutes les 15 min
 
 Les options **GitHub hook trigger for GITScm polling** et **Scrutation de l'outil de gestion de version** permettent de générer des exécutions uniquement selon certaines conditions relatives aux événements sur le dépôt Git. Elles ne sont pas couvertes dans ce sujet, mais peuvent être explorées durant le TP.
 
-Enfin, la dernière section vous permet de définir le Pipeline à exécuter. La première boîte vous invite à choisir un gestionnaire de version. Choisissez **Git** parmi les options. La boîte suivante vous permet de choisir la source de votre Pipeline. Choisissez **Pipeline Script from SCM** : de nouveaux champs apparaissent.
+Enfin, la dernière section vous permet de définir le Pipeline à exécuter. La première boîte vous invite à choisir la source de votre Pipeline. Choisissez **Pipeline Script from SCM**. La boîte suivante vous permet de choisir un gestionnaire de version. Choisissez **Git** parmi les options : de nouveaux champs apparaissent.
 
 Dans le champ **Repository url**, entrez l'url de votre dépôt sur GitHub, qui devrait ressembler à :
 
