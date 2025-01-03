@@ -7,8 +7,6 @@ from Terrain import Terrain, Case
 class TestTerrain(unittest.TestCase):
 
     def test_chargement(self):
-         # Initialiser un terrain
-
         t = Terrain()
         t.charger("terrains/t1.txt")
 
