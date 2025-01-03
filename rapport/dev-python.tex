@@ -31,4 +31,28 @@ La stratégie automatique propose 3 "types" de configuration du réseau pour rec
 
 Cette dernière stratégie, explore de manière systématique tous les noeuds voisins, garantissant que la couverture du terrain est optimale, indépendamment de la configuration d'entrée. En effet, quelle que soit la disposition du terrain, y compris la présence d'obstacles ou la distribution des clients, l'algorithme parvient toujours à trouver la solution la plus adaptée pour relier les différents points du réseau.
 
+\vspace{0.2cm}
 \textbf{Exemple de résolution :}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{dev-python/terrain1.png}
+        \caption{Terrain sans réseau}
+        \label{fig:image1}
+    \end{minipage} \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{dev-python/terrain2.png}
+        \caption{Réseau après BFS}
+        \label{fig:image2}
+    \end{minipage}
+\end{figure}
+
+\subsection{Écriture des tests}
+
+Après avoir terminé l'implémentation des fonctions, nous avons développé des tests unitaires pour en valider le comportement. Ces tests ont permis de s’assurer que chaque fonction répond correctement aux différents cas d’utilisation, y compris les situations limites.
+
+L’écriture de ces tests a également joué un rôle clé dans la détection précoce d’éventuelles erreurs, tout en garantissant une base solide pour les étapes suivantes du projet. Cette démarche a renforcé la fiabilité globale du code et assuré une meilleure maintenance.
+
