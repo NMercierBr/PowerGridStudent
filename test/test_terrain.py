@@ -7,8 +7,14 @@ from Terrain import Terrain, Case
 class TestTerrain(unittest.TestCase):
 
     def test_chargement(self):
-        # TODO
-        self.fail()
+         # Initialiser un terrain
+
+        t = Terrain()
+        t.charger("terrains/t1.txt")
+
+        # Vérifications des dimensions
+        self.assertEqual(t.largeur, 21)
+        self.assertEqual(t.hauteur, 10) 
 
     def test_accesseur(self):
         t = Terrain()

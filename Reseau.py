@@ -34,11 +34,35 @@ class Reseau:
         self.strat = strat
 
     def valider_reseau(self) -> bool:
-        # TODO
-        return False
+        # TODO - A tester :3
+        # On va utiliser un DFS à partir du noeud d'entrée
+        
+        noeuds_visites = []
+        noeuds_a_visiter = [self.noeud_entree]
+        while len(noeuds_a_visiter) > 0 :
+            prochain_noeud = noeuds_a_visiter.pop()
+            for arc in self.arcs:
+                if (arc[0] == prochain_noeud) and (arc[1] not in noeuds_visites):
+                    noeuds_a_visiter.append(arc[1])
+                    noeuds_visites.append(arc[1])
+                elif arc[1] == prochain_noeud and (arc[0] not in noeuds_visites):
+                    noeuds_a_visiter.append(arc[0])
+                    noeuds_visites.append(arc[0])
+
+        return set(noeuds_visites) == set(self.noeuds.keys())
 
     def valider_distribution(self, t: Terrain) -> bool:
-        # TODO
+
+        distrib_OK = True
+        clients = t.get_clients()
+        for client in clients:
+            for noeud in self.noeuds:
+                if client == noeud:
+                    continue
+            return False # Atteint uniquement si il y a un client qui n'est pas sur un noeud
+
+        return True # Atteint uniquement si on a jamais atteint "return False"
+
         return False
 
     def configurer(self, t: Terrain):
@@ -85,4 +109,3 @@ class Reseau:
             else:
                 cout += 1
         return cout
-    

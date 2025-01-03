@@ -21,6 +21,8 @@ if __name__ == "__main__":
         reseau.afficher_avec_terrain(terrain)
     else:
         print("Pas de configuration valide trouvée.")
+        reseau.afficher_avec_terrain(terrain)
+
 
     print("======= Configuration Manuelle")
     reseau.set_strategie(StrategieReseauManuelle())
@@ -31,5 +33,7 @@ if __name__ == "__main__":
         reseau.afficher_avec_terrain(terrain)
     else:
         print("Pas de configuration valide optimale trouvée.")
+        reseau.afficher_avec_terrain(terrain)
+
 
 
